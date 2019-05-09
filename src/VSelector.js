@@ -1,4 +1,4 @@
-const clickFor = require('./triggers/clickFor')
+const click = require('./triggers/click')
 const blur = require('./triggers/blur')
 const input = require('./triggers/input')
 
@@ -159,7 +159,7 @@ class VSelector {
         this.domSelector = await utils.converToDomSelector(
             utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
         )
-        await clickFor.call(this, this.domSelector, opts)
+        await click.call(this, this.domSelector, opts)
         return this
     }
 

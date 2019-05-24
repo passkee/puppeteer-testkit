@@ -1,59 +1,57 @@
-const target = require('./target')
-const location = require('./location')
+const target = require('./target');
+const location = require('./location');
 
 module.exports = {
-    target: async (targetUrlSubstr) => {
-        const res = !!(await target.findTarget(targetUrlSubstr))
-        if (!res) {
-            throw new Error(`expect target: ${targetUrlSubstr} but false`)
-        }
-    },
-    location: {
-        hash: async (hash, hashParams, options) => {
-            const ok = (async () => {
-                const lct = await location()
-                if (lct.hash === hash) {
-                    if (hashParams && Object.keys(hashParams).length) {
-                        const search = lct.hashSearch
-                        return Object.keys(hashParams).every(
-                            (key) => search[key] === hashParams[key]
-                        )
-                    } else {
-                        return true
-                    }
-                }
-            })()
-            if (!ok) {
-                throw new Error(
-                    `expect location hash: ${hash} ${
-                        hashParams ? JSON.stringify(hashParams) : ''
-                    } but false`
-                )
-            }
-        },
+	target: async (targetUrlSubstr, silent) => {
+		const res = !!await target.findTarget(targetUrlSubstr);
+		if (!res) {
+			if (!silent) {
+				throw new Error(`expect target: ${targetUrlSubstr} but false`);
+			}
+		}
+		return true;
+	},
 
-        pathname: async (pathname, options) => {
-            const lct = await location()
-            if (lct.pathname !== pathname) {
-                throw new Error(
-                    `expect location pathname: ${pathname} but false`
-                )
-            }
-        },
-
-        search: async (params, options) => {
-            const lct = await location()
-            const search = lct.search
-            const ok = Object.keys(params).every(
-                (key) => search[key] === params[key]
-            )
-            if (!ok) {
-                throw new Error(
-                    `expect location params: ${JSON.stringify(
-                        params
-                    )} but false`
-                )
-            }
-        }
-    }
-}
+	// 完整url分解参数
+	location: async (baseUrl, params, silent) => {
+		const lct = await location();
+		if (lct.baseUrl !== baseUrl) {
+			if (!silent) {
+				throw new Error(`expect location: ${baseUrl} but got ${lct.baseUrl}`);
+			}
+			return false;
+		}
+		if (params && Object.keys(params).length) {
+			const search = lct.search;
+			const ok = Object.keys(params).every((key) => search[key] === params[key]);
+			if (!ok) {
+				if (!silent) {
+					throw new Error(
+						`expect location search: ${JSON.stringify(params)} but got ${JSON.stringify(search)}`
+					);
+				}
+				return false;
+			}
+		}
+		return true;
+	}
+};
+module.exports.location.hash = async (hash, hashParams, silent) => {
+	let ok;
+	const lct = await location();
+	if (lct.hash === hash) {
+		if (hashParams && Object.keys(hashParams).length) {
+			const search = lct.hashSearch;
+			ok = Object.keys(hashParams).every((key) => search[key] === hashParams[key]);
+		} else {
+			ok = true;
+		}
+	}
+	if (!ok) {
+		if (!silent) {
+			throw new Error(`expect location hash: ${hash} ${hashParams ? JSON.stringify(hashParams) : ''} but false`);
+		}
+		return false;
+	}
+	return true;
+};

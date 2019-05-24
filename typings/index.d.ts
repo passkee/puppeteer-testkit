@@ -1,5 +1,5 @@
-import { Domkit } from './Domkit'
+import { TestKit } from './TestKit';
 
-declare var $: Domkit
+declare var $: TestKit;
 
-export default $
+export default $;

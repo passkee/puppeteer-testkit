@@ -1,109 +1,77 @@
-const utils = require('../utils')
-const target = require('./target')
-const location = require('./location')
-const qs = require('qs')
-
+const utils = require('../utils');
+const location = require('./location');
+const qs = require('qs');
+const expects = require('./expects');
 module.exports = {
-    target: async (targetUrlSubstr, options) => {
-        await utils.waitFor(
-            async () => {
-                return !!(await target.findTarget(targetUrlSubstr))
-            },
-            options,
-            `waiting for target: ${targetUrlSubstr} but timeout (#)`
-        )
-    },
+	target: async (targetUrlSubstr, options) => {
+		await utils.waitFor(
+			async () => {
+				return expects.target(targetUrlSubstr, true);
+			},
+			options,
+			`waiting for target: ${targetUrlSubstr} but timeout (#)`
+		);
+	},
 
-    location: {
-        hash: async (hash, hashParams, options) => {
-            await utils.waitFor(
-                async () => {
-                    const lct = await location()
-                    if (lct.hash === hash) {
-                        if (hashParams && Object.keys(hashParams).length) {
-                            const search = lct.hashSearch
-                            return Object.keys(hashParams).every(
-                                (key) => search[key] === hashParams[key]
-                            )
-                        } else {
-                            return true
-                        }
-                    }
-                },
-                options,
-                `waiting for location hash: ${hash},  but timeout (#)`
-            )
-        },
+	// 完整url分解参数
+	location: async (baseUrl, params, options) => {
+		await utils.waitFor(
+			async () => {
+				return expects.location(baseUrl, params, true);
+			},
+			options,
+			`waiting for location: ${baseUrl} ${JSON.stringify(params)},  but timeout (#)`
+		);
+	},
+	// 完整url分解参数
+	request: async (baseUrl, postData, options) => {
+		await page.waitForRequest((request) => {
+			const urlObj = utils.parseUrl(request.url());
+			const postData = qs.parse(request.postData());
+			if (baseUrl === urlObj.baseUrl) {
+				if (data && Object.keys(data).length) {
+					const search = { ...urlObj.search, ...postData };
+					return Object.keys(data).every((key) => search[key] === data[key]);
+				} else {
+					return true;
+				}
+			}
+		}, options || { timeout: 2000 });
+	},
+	// 完整url分解参数
+	response: async (baseUrl, options) => {
+		await page.waitForResponse((response) => {
+			const urlObj = utils.parseUrl(response.url());
+			if (baseUrl === urlObj.baseUrl && response.status() === 200) {
+				return true;
+			}
+		}, options || { timeout: 2000 });
+	},
 
-        pathname: async (pathname, options) => {
-            await utils.waitFor(
-                async () => {
-                    const lct = await location()
-                    return lct.pathname === pathname
-                },
-                options,
-                `waiting for location pathname: ${pathname} but timeout (#)`
-            )
-        },
+	delay: (ms) => {
+		return new Promise((r, rj) => {
+			setTimeout(() => {
+				r();
+			}, ms || 100);
+		});
+	},
 
-        search: async (params, options) => {
-            await utils.waitFor(
-                async () => {
-                    const lct = await location()
-                    const search = lct.search
-                    return Object.keys(params).every(
-                        (key) => search[key] === params[key]
-                    )
-                },
-                options,
-                `waiting for location params: ${JSON.stringify(
-                    params
-                )} but timeout (#)`
-            )
-        }
-    },
-
-    request: async (pathname, params, options) => {
-        await page.waitForRequest((request) => {
-            const urlObj = utils.parseUrl(request.url())
-            const postData = qs.parse(request.postData())
-            if (pathname === urlObj.pathname) {
-                if (params && Object.keys(params).length) {
-                    const search = { ...urlObj.search, ...postData }
-                    return Object.keys(params).every(
-                        (key) => search[key] === params[key]
-                    )
-                } else {
-                    return true
-                }
-            }
-        }, options || { timeout: 2000 })
-    },
-
-    response: async (pathname, options) => {
-        await page.waitForResponse((response) => {
-            const urlObj = utils.parseUrl(response.url())
-            if (pathname === urlObj.pathname && response.status() === 200) {
-                return true
-            }
-        }, options || { timeout: 2000 })
-    },
-
-    delay: (ms) => {
-        return new Promise((r, rj) => {
-            setTimeout(() => {
-                r()
-            }, ms || 100)
-        })
-    },
-
-    fn: async (cb, options) => {
-        await utils.waitFor(
-            async () => {
-                return await cb()
-            },
-            options,
-            `waiting for callback return true but timeout (#)`
-        )
-    }
-}
+	fn: async (cb, options) => {
+		await utils.waitFor(
+			async () => {
+				return await cb();
+			},
+			options,
+			`waiting for callback return true but timeout (#)`
+		);
+	}
+};
+module.exports.location.hash = async (hash, hashParams, options) => {
+	await utils.waitFor(
+		async () => {
+			return expects.location.hash(hash, hashParams, true);
+		},
+		options,
+		`waiting for location hash: ${hash} ${JSON.stringify(hashParams)},  but timeout (#)`
+	);
+};

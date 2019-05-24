@@ -1,56 +1,56 @@
 // const utils = require('@/utils')
-import 'colors'
-import puppeteer from 'puppeteer'
-import { Domkit } from '@/typings/Domkit'
+import 'colors';
+import puppeteer from 'puppeteer';
+import { TestKit } from '@/typings/TestKit';
 
-import $spec from './$'
-import $expect from './$.expect'
-import $waitFor from './$.waitFor'
-import $Selector from './$Selector'
-import $SelectorExpect from './$Selector.expect'
-import $SelectorWaitFor from './$Selector.waitFor'
+import TK from './TestKit';
+import $expect from './TestKit.expect';
+import $waitFor from './TestKit.waitFor';
+import VSelector from './VSelector';
+import VSelectorExpect from './VSelector.expect';
+import VSelectorWaitFor from './VSelector.waitFor';
 
-const $: Domkit = require('../index')
+const $: TestKit = require('../index');
 
-describe('puppeteer-domkit', () => {
-    before(async () => {
-        let browser = await puppeteer.launch({
-            //headless: true
-            //devtools: true
-        })
+describe('puppeteer-testkit', () => {
+	before(async () => {
+		let browser = await puppeteer.launch(
+			{
+				//headless: true
+				//devtools: true
+			}
+		);
 
-        let page = (await browser.pages())[0]
+		let page = (await browser.pages())[0];
 
-        await $.setBrowser(browser)
+		await $.setBrowser(browser);
 
-        await page.setViewport({
-            width: 1366,
-            height: 768
-        })
+		await page.setViewport({
+			width: 1366,
+			height: 768
+		});
 
-        await page.goto(
-            'https://registry.npm.taobao.org/passkee?param=1#/hash?hashparam=3'
-        )
+		await page.goto('https://registry.npm.taobao.org/passkee?param=1#/hash?hashparam=3');
 
-        await page.setContent(`<html><body><div id="for-ppt-test"
+		await page.setContent(`<html><body><div id="for-ppt-test"
                                     attr="for-ppt-test"
                                     data-data="for-ppt-test"
                                     class="for-ppt-test"
                                     style="display:block;height: 100px; width: 100px; position: fixed; top: 100px; left:100px;">
                                         for-ppt-test
                                 </div></body></html>
-                                `)
-        await page.waitForSelector('#for-ppt-test')
+                                `);
+		await page.waitForSelector('#for-ppt-test');
 
-        await page.waitFor(1000)
-    })
-    after(() => {
-        $.browser.close()
-    })
-    describe('$', $spec)
-    describe('$.expect', $expect)
-    describe('$.waitFor', $waitFor)
-    describe('$Selector', $Selector)
-    describe('$Selector.expect', $SelectorExpect)
-    describe('$Selector.waitFor', $SelectorWaitFor)
-})
+		await page.waitFor(1000);
+	});
+	after(() => {
+		$.browser.close();
+	});
+	describe('TestKit', TK);
+	describe('TestKit.expect', $expect);
+	describe('TestKit.waitFor', $waitFor);
+	describe('VSelector', VSelector);
+	describe('VSelector.expect', VSelectorExpect);
+	describe('VSelector.waitFor', VSelectorWaitFor);
+});

@@ -12,6 +12,7 @@ export interface TestKit {
 	expect: $Expect;
 
 	reload(options?: NavigationOptions): Promise<Response>;
+	title(): Promise<string>;
 
 	findTarget(targetUrlSubstr: string): Promise<Target>;
 	closeTarget(targetUrlSubstr: string): Promise<Target>;
@@ -23,11 +24,13 @@ export interface TestKit {
 	setCurrentPage(page: any): Promise<void>;
 }
 interface $Expect {
+	title(title: string): Promise<void>;
 	target(urlSubstr: string, opened?: boolean): Promise<void>;
 	location: ExpectLocation;
 }
 
 interface $WaitFor {
+	title(title: string, options?: WaitForOptions): Promise<void>;
 	target(urlSubstr: string, options?: WaitForOptions): Promise<void>;
 	response(urlPathName: string, options?: TimeoutOption): Promise<void>;
 	request(urlPathName: string, params?: { [key: string]: string }, options?: TimeoutOption): Promise<void>;

@@ -3,6 +3,15 @@ const location = require('./location');
 const qs = require('qs');
 const expects = require('./expects');
 module.exports = {
+	title: async (title, options) => {
+		await utils.waitFor(
+			async () => {
+				return expects.title(title, true);
+			},
+			options,
+			`waiting for title: ${title} but timeout (#)`
+		);
+	},
 	target: async (targetUrlSubstr, options) => {
 		await utils.waitFor(
 			async () => {

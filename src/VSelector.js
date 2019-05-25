@@ -1,7 +1,6 @@
 const clickFor = require('./triggers/clickFor')
 const blur = require('./triggers/blur')
 const input = require('./triggers/input')
-
 const utils = require('./utils')
 
 function $(selector) {
@@ -151,6 +150,12 @@ class VSelector {
         })
     }
 
+    async length() {
+        return await page.evaluate((selectors) => {
+            return $Z.$select(selectors).length
+        }, this.selectors)
+    }
+
     /**
      * 增强点击
      * @param {*} opts
@@ -187,20 +192,43 @@ class VSelector {
         return this
     }
 
-    async length() {
-        return await page.evaluate((selectors) => {
-            return $Z.$select(selectors).length
-        }, this.selectors)
+    async type(content, autoBlur = true) {
+        this.domSelector = await utils.converToDomSelector(
+            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
+        )
+        await page.type(this.domSelector, content)
+        if (autoBlur) {
+            await blur(this.domSelector)
+        }
+    }
+
+    async hover() {
+        this.domSelector = await utils.converToDomSelector(
+            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
+        )
+        await page.hover(this.domSelector)
+    }
+
+    async upload(filePaths) {
+        this.domSelector = await utils.converToDomSelector(
+            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
+        )
+        const isFileInput = await page.$eval(
+            this.domSelector,
+            (el) => el.tagName === 'INPUT' && el.type === 'file'
+        )
+        if (!isFileInput) {
+            throw new Error(`[TestKit] the element should be file input`)
+        }
+
+        const el = await page.$(this.domSelector)
+        await utils.apply(el.uploadFile, filePaths, el)
     }
 
     /* to dev
-    async type() {}
     async mouse() {}
-    async hover() {}
-    async tap() {}
     async press() {}
     async screenshot() {}
-    async uploadFile() {}
     */
 }
 // 没参数

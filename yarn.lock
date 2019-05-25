@@ -34,6 +34,10 @@ agent-base@^4.1.0:
   dependencies:
     es6-promisify "^5.0.0"
 
+apply.js@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/apply.js/download/apply.js-1.0.0.tgz#3a5bb85c9dd47be5abb41311a962fb95b0187f54"
+
 arg@^4.1.0:
   version "4.1.0"
   resolved "https://registry.npmjs.org/arg/-/arg-4.1.0.tgz#583c518199419e0037abb74062c37f8519e575f0"

@@ -11,5 +11,5 @@ module.exports = async (selector, offsetY) => {
             return
         }
     }
-    await page.mouse.click(box.x + box.width / 2, box.y - (offsetY || 1))
+    await page.mouse.click(box.x + box.width / 2, box.y - (offsetY || 2))
 }

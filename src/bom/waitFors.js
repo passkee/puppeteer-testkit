@@ -22,47 +22,58 @@ module.exports = {
 		);
 	},
 
-	// 完整url分解参数
-	location: async (urlOrPath, options) => {
+	location: async (urlOrPathOrHash, options) => {
 		await utils.waitFor(
 			async () => {
-				return expects.location(urlOrPath, true);
+				return expects.location(urlOrPathOrHash, true);
 			},
 			options,
-			`waiting for location: ${urlOrPath}},  but timeout (#)`
+			`waiting for url || Path || Hash: ${urlOrPathOrHash},  but timeout (#)`
 		);
 	},
-	// 完整url分解参数
-	request: async (baseUrl, postData, options) => {
-		await page.waitForRequest((request) => {
-			const urlObj = utils.parseUrl(request.url());
-			const postData = qs.parse(request.postData());
-			if (baseUrl === urlObj.baseUrl) {
-				if (data && Object.keys(data).length) {
-					const search = { ...urlObj.search, ...postData };
-					return Object.keys(data).every((key) => search[key] === data[key]);
+
+	request: async (urlOrPath, postData, options) => {
+		try {
+			await page.waitForRequest((request) => {
+				const urlObj = utils.parseUrl(request.url(), request.url());
+
+				const urlFixed = utils.parseUrl(urlOrPath, urlObj.href);
+
+				if (utils.compareUrl(urlFixed.href, urlObj.href, true)) {
+					if (postData) {
+						const data = qs.parse(request.postData());
+						const pdata = qs.parse(postData);
+						if (Object.keys(pdata).length) {
+							return Object.keys(pdata).every(
+								(key) => JSON.stringify(pdata[key]) === JSON.stringify(data[key])
+							);
+						} else {
+							return true;
+						}
+					} else {
+						return true;
+					}
 				} else {
-					return true;
+					return false;
 				}
-			}
-		}, options || { timeout: 2000 });
-	},
-	// 完整url分解参数
-	response: async (baseUrl, options) => {
-		await page.waitForResponse((response) => {
-			const urlObj = utils.parseUrl(response.url());
-			if (baseUrl === urlObj.baseUrl && response.status() === 200) {
-				return true;
-			}
-		}, options || { timeout: 2000 });
+			}, options || { timeout: 2000 });
+		} catch (e) {
+			throw new utils.TimeoutError(
+				`waiting for request of: ${urlOrPath} ${postData ? ' and post data: ' + postData : ''},  but timeout`
+			);
+		}
 	},
 
-	delay: (ms) => {
-		return new Promise((r, rj) => {
-			setTimeout(() => {
-				r();
-			}, ms || 100);
-		});
+	response: async (urlOrPath, options) => {
+		try {
+			await page.waitForResponse((response) => {
+				const urlObj = utils.parseUrl(response.url(), response.url());
+				const urlFixed = utils.parseUrl(urlOrPath, urlObj.href);
+				return utils.compareUrl(urlFixed.href, urlObj.href, true) && response.status() === 200;
+			}, options || { timeout: 2000 });
+		} catch (e) {
+			throw new utils.TimeoutError(`waiting for response of: ${urlOrPath},  but timeout`);
+		}
 	},
 
 	fn: async (cb, options) => {
@@ -74,13 +85,4 @@ module.exports = {
 			`waiting for callback return true but timeout (#)`
 		);
 	}
-};
-module.exports.location.hash = async (hash, hashParams, options) => {
-	await utils.waitFor(
-		async () => {
-			return expects.location.hash(hash, hashParams, true);
-		},
-		options,
-		`waiting for location hash: ${hash} ${JSON.stringify(hashParams)},  but timeout (#)`
-	);
 };

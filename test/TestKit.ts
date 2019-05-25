@@ -18,4 +18,12 @@ export default () => {
 			}
 		});
 	});
+
+	it(`$.waitFor.delay`, async () => {
+		const t1 = Date.now();
+		await $.delay();
+		if (Date.now() - t1 < 1000) {
+			throw `${Date.now() - t1}`;
+		}
+	});
 };

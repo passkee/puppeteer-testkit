@@ -16,10 +16,10 @@ class ExpectError extends Error {
 	}
 }
 
-module.exports = {
-	compareUrl: async (urlOrPathOrHash, basetUrl, silent) => {
-		const base = this.parseUrl(basetUrl, basetUrl);
-		const urlObj = this.parseUrl(urlOrPathOrHash, basetUrl);
+const utils = {
+	compareUrl: (urlOrPathOrHash, basetUrl, silent) => {
+		const base = utils.parseUrl(basetUrl, basetUrl);
+		const urlObj = utils.parseUrl(urlOrPathOrHash, basetUrl);
 		if (urlObj.protocol !== base.protocol) {
 			if (!silent) {
 				throw new Error(`expected protocol ${urlObj.protocol}, but found ${base.protocol}`);
@@ -75,14 +75,14 @@ module.exports = {
 
 		return true;
 	},
-	parseUrl(uri, targetUrl) {
-		const base = url.parse(targetUrl);
+	parseUrl(uri, contextUrl) {
+		const context = url.parse(contextUrl);
 		if (uri[0] === '#') {
-			uri = base.baseUrl + uri;
+			uri = context.baseUrl + uri;
 		} else if (!/^[a-z]+?\:?\/\//.test(uri)) {
-			uri = base.protocol + '//' + base.host + (uri[0] === '/' ? uri : '/' + uri);
+			uri = context.protocol + '//' + context.host + (uri[0] === '/' ? uri : '/' + uri);
 		} else if (/^\/\//.test(uri)) {
-			uri = base.protocol + uri;
+			uri = context.protocol + uri;
 		}
 
 		const urlObj = url.parse(uri);
@@ -235,3 +235,4 @@ module.exports = {
 		);
 	}
 };
+module.exports = utils;

@@ -7,10 +7,7 @@ export default () => {
 	});
 
 	it(`location`, async () => {
-		await $.expect.location.hash('#/hash', { hashparam: '3' });
-		await $.expect.location.pathname('/passkee');
-		await $.expect.location.search({
-			param: '1'
-		});
+		//await $.expect.location('#/hash?hashparam=3');
+		await $.expect.location('/passkee?param=1');
 	});
 };

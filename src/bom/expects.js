@@ -26,6 +26,7 @@ module.exports = {
 	//
 	location: async (urlOrPathOrHash, silent) => {
 		const lct = await location();
-		return utils.compareUrl(urlOrPathOrHash, lct.href, silent);
+		const url = utils.parseUrl(urlOrPathOrHash, lct.href);
+		return utils.compareUrl(url.href, lct.href, silent);
 	}
 };

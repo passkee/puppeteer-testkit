@@ -11,6 +11,8 @@ export interface TestKit {
 	waitFor: $WaitFor;
 	expect: $Expect;
 
+	delay(ms?: number): Promise<void>;
+
 	reload(options?: NavigationOptions): Promise<Response>;
 	title(): Promise<string>;
 
@@ -26,31 +28,18 @@ export interface TestKit {
 interface $Expect {
 	title(title: string): Promise<void>;
 	target(urlSubstr: string, opened?: boolean): Promise<void>;
-	location: ExpectLocation;
+	location(urlOrPathOrHash: string): Promise<void>;
 }
 
 interface $WaitFor {
 	title(title: string, options?: WaitForOptions): Promise<void>;
 	target(urlSubstr: string, options?: WaitForOptions): Promise<void>;
-	response(urlPathName: string, options?: TimeoutOption): Promise<void>;
-	request(urlPathName: string, params?: { [key: string]: string }, options?: TimeoutOption): Promise<void>;
-	delay(ms?: number): Promise<void>;
+	request(urlOrPath: string, postData?: string, options?: TimeoutOption): Promise<void>;
+	response(urlOrPath: string, options?: TimeoutOption): Promise<void>;
 
-	location: WaitForLocation;
+	location(urlOrPathOrHash: string, options?: TimeoutOption): Promise<void>;
 
 	fn(callback: () => Promise<boolean>, options?: WaitForOptions): Promise<void>;
-}
-
-interface WaitForLocation {
-	(baseUrl, params?: { [key: string]: string }, options?: WaitForOptions): Promise<void>;
-	hash(hash: string, hashParams?: { [key: string]: string }, options?: WaitForOptions): Promise<void>;
-}
-
-interface ExpectLocation {
-	(baseUrl, params?: { [key: string]: string }): boolean;
-	hash(hash: string, hashParams?: { [key: string]: string });
-	pathname(pathname: string);
-	search(params: { [key: string]: string });
 }
 
 interface constants {

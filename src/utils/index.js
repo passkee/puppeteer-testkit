@@ -17,22 +17,90 @@ class ExpectError extends Error {
 }
 
 module.exports = {
-	parseUrl(uri) {
+	compareUrl: async (urlOrPathOrHash, basetUrl, silent) => {
+		const base = this.parseUrl(basetUrl, basetUrl);
+		const urlObj = this.parseUrl(urlOrPathOrHash, basetUrl);
+		if (urlObj.protocol !== base.protocol) {
+			if (!silent) {
+				throw new Error(`expected protocol ${urlObj.protocol}, but found ${base.protocol}`);
+			}
+			return false;
+		}
+		if (urlObj.host !== base.host) {
+			if (!silent) {
+				throw new Error(`expected host ${urlObj.host}, but found ${base.host}`);
+			}
+			return false;
+		}
+		if (urlObj.pathname !== base.pathname) {
+			if (!silent) {
+				throw new Error(`expected pathname ${urlObj.pathname}, but found ${base.pathname}`);
+			}
+			return false;
+		}
+		const params = urlObj.search;
+		if (params && Object.keys(params).length) {
+			const search = base.search;
+			if (!Object.keys(params).every((key) => search[key] === params[key])) {
+				if (!silent) {
+					throw new Error(
+						`expected search map ${JSON.stringify(params)}, but found ${JSON.stringify(search)}`
+					);
+				}
+				return false;
+			}
+		}
+		if (urlObj.hash) {
+			if (urlObj.hash !== base.hash) {
+				if (!silent) {
+					throw new Error(`expected hash ${urlObj.hash}, but found ${base.hash}`);
+				}
+				return false;
+			}
+			const hashQuery = urlObj.hashQuery;
+			if (hashQuery && Object.keys(hashQuery).length) {
+				const tHashQuery = base.hashQuery;
+				if (!Object.keys(hashQuery).every((key) => tHashQuery[key] === hashQuery[key])) {
+					if (!silent) {
+						throw new Error(
+							`expected hash query map ${JSON.stringify(hashQuery)}, but found ${JSON.stringify(
+								tHashQuery
+							)}`
+						);
+					}
+					return false;
+				}
+			}
+		}
+
+		return true;
+	},
+	parseUrl(uri, targetUrl) {
+		const base = url.parse(targetUrl);
+		if (uri[0] === '#') {
+			uri = base.baseUrl + uri;
+		} else if (!/^[a-z]+?\:?\/\//.test(uri)) {
+			uri = base.protocol + '//' + base.host + (uri[0] === '/' ? uri : '/' + uri);
+		} else if (/^\/\//.test(uri)) {
+			uri = base.protocol + uri;
+		}
+
 		const urlObj = url.parse(uri);
-		if (urlObj.search) {
-			urlObj.search = urlObj.search[0] === '?' ? urlObj.search.slice(1) : urlObj.search;
-			urlObj.search = urlObj.search ? qs.parse(urlObj.search) : {};
+		if (urlObj.query) {
+			urlObj.search = urlObj.query ? qs.parse(urlObj.query) : {};
 		} else {
 			urlObj.search = {};
 		}
 		if (urlObj.hash) {
 			const hash = urlObj.hash.split('?');
 			urlObj.hash = hash[0];
-			urlObj.hashSearch = hash[1] ? qs.parse(hash[1]) : {};
+			urlObj.hashQuery = hash[1] ? qs.parse(hash[1]) : {};
 		} else {
-			urlObj.hashSearch = {};
+			urlObj.hashQuery = {};
 		}
+
 		urlObj.baseUrl = urlObj.protocol + '//' + urlObj.host + urlObj.pathname;
+
 		return urlObj;
 	},
 	defineFreezedProps(context, obj) {

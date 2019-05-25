@@ -41,8 +41,6 @@ export default () => {
 	// https://registry.npm.taobao.org/passkee?param=1#/hash?hashparam=3
 	it.only(`$.waitFor.location`, async () => {
 		await $.waitFor.location.hash('#/hash', { hashparam: '3' });
-		await $.waitFor.location('https://registry.npm.taobao.org/passkee', {
-			param: '1'
-		});
+		await $.waitFor.location('/passkee?param=1');
 	});
 };

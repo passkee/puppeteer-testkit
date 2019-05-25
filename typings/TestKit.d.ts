@@ -76,5 +76,5 @@ interface LocationObject {
 	pathname: string | null;
 	path: string | null;
 	href: string | null;
-	hashSearch: { [key: string]: string };
+	hashQuery: { [key: string]: string };
 }

@@ -14,13 +14,13 @@ module.exports = {
 	},
 
 	// 完整url分解参数
-	location: async (baseUrl, params, options) => {
+	location: async (urlOrPath, options) => {
 		await utils.waitFor(
 			async () => {
-				return expects.location(baseUrl, params, true);
+				return expects.location(urlOrPath, true);
 			},
 			options,
-			`waiting for location: ${baseUrl} ${JSON.stringify(params)},  but timeout (#)`
+			`waiting for location: ${urlOrPath}},  but timeout (#)`
 		);
 	},
 	// 完整url分解参数

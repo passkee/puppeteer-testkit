@@ -1,7 +1,6 @@
 const target = require('./target');
 const location = require('./location');
 const utils = require('../utils');
-const location = require('./location');
 
 module.exports = {
 	title: async (title, silent) => {

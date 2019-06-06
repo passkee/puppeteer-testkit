@@ -2,6 +2,7 @@ const clickFor = require('./triggers/clickFor')
 const blur = require('./triggers/blur')
 const input = require('./triggers/input')
 const utils = require('./utils')
+const screenshot = require('./screenshot')
 
 function $(selector) {
     return new VSelector(selector)
@@ -223,6 +224,13 @@ class VSelector {
 
         const el = await page.$(this.domSelector)
         await utils.apply(el.uploadFile, filePaths, el)
+    }
+
+    async screenshot(name) {
+        this.domSelector = await utils.converToDomSelector(
+            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
+        )
+        await screenshot(this.domSelector, name)
     }
 
     /* to dev

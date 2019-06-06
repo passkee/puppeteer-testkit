@@ -10,6 +10,8 @@ export declare class VSelector {
     hover(): Promise<void>
     upload(filepaths: string[]): Promise<void>
 
+    screenshot(name: string): Promise<void>
+
     text(): Promise<string>
     html(): Promise<string>
     height(): Promise<number>

@@ -1,12 +1,15 @@
 const utils = require('../utils')
 const path = require('path')
 const fs = require('fs-extra')
+const BlinkDiff = require('blink-diff')
 
 module.exports = async (selector, name) => {
     const el = await page.$(selector)
     const box = await el.boundingBox()
     if (!el || !box) {
-        throw '[puppeteer-testkit] element not visible or deleted fro document'
+        throw new Error(
+            '[puppeteer-testkit] element not visible or deleted fro document'
+        )
     }
     console.log(box)
 
@@ -15,14 +18,68 @@ module.exports = async (selector, name) => {
         encoding: 'binary' // base64 binary
     })
 
-    let saveToPath = path.join(utils.screenshotSavePath, name)
-    const paths = saveToPath.replace(/\\/g, '/').split('/')
-    const fileName = paths.pop()
-    saveToPath = saveToPath.substring(0, saveToPath.lastIndexOf(fileName))
+    if (!fs.existsSync(path.join(utils.screenshotSavePath, 'A', name))) {
+        saveTo(name, 'A', image)
+    } else {
+        saveTo(name, 'B', image)
+        saveTo(name, 'output', '')
+        const res = await diff(name)
+        console.log(res)
+        if (!res.passed) {
+            throw new Error(
+                `to much differences between two screenshots, ${JSON.stringify(
+                    res
+                )}`
+            )
+        }
+    }
+}
 
-    if (!fs.existsSync(saveToPath)) {
-        fs.mkdirpSync(saveToPath)
+function diff(name) {
+    const AImage = path.join(utils.screenshotSavePath, 'A', name)
+    const BImage = path.join(utils.screenshotSavePath, 'B', name)
+    const OImage = path.join(utils.screenshotSavePath, 'output', name)
+
+    return new Promise((r, rj) => {
+        var bdiff = new BlinkDiff({
+            imageAPath: AImage,
+            imageBPath: BImage,
+            thresholdType: BlinkDiff.THRESHOLD_PERCENT,
+            threshold: 0.01,
+            imageOutputPath: OImage
+        })
+
+        bdiff.run(function(error, result) {
+            if (error) {
+                rj(error)
+            } else {
+                r(
+                    Object.assign(
+                        {
+                            passed: bdiff.hasPassed(result.code),
+                            oPath: OImage,
+                            aPath: AImage,
+                            bPath: BImage
+                        },
+                        result
+                    )
+                )
+            }
+        })
+    })
+}
+
+function saveTo(name, target, image) {
+    const folder = path.join(utils.screenshotSavePath, target)
+    if (!fs.existsSync(folder)) {
+        fs.mkdirpSync(folder)
+    }
+    const paths = name.split('/')
+    const fileName = paths.pop()
+    const nameFolder = path.join(folder, paths.join('/'))
+    if (!fs.existsSync(nameFolder)) {
+        fs.mkdirpSync(nameFolder)
     }
 
-    await fs.writeFile(path.join(saveToPath, fileName), image)
+    fs.writeFileSync(path.join(nameFolder, fileName), image)
 }

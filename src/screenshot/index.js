@@ -27,7 +27,7 @@ module.exports = async (selector, name) => {
         console.log(res)
         if (!res.passed) {
             throw new Error(
-                `to much differences between two screenshots, ${path.join(
+                `To much differences between the two screenshots, ${path.join(
                     utils.screenshotSavePath,
                     'A',
                     name

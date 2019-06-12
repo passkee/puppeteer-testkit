@@ -4,17 +4,25 @@ const fs = require('fs-extra')
 const BlinkDiff = require('blink-diff')
 
 module.exports = async (selector, name) => {
-    const el = await page.$(selector)
-    const box = await el.boundingBox()
-    if (!el || !box) {
+    const offset = await page.evaluate((selector) => {
+        return $Z(selector).offset()
+    }, selector)
+
+    if (!offset) {
         throw new Error(
             '[puppeteer-testkit] element not visible or deleted fro document'
         )
     }
-    console.log(box)
+    console.log(offset)
 
     const image = await page.screenshot({
-        clip: box,
+        // document坐标
+        clip: {
+            x: offset.left,
+            y: offset.top,
+            width: offset.width,
+            height: offset.height
+        },
         encoding: 'binary' // base64 binary
     })
 
@@ -27,21 +35,21 @@ module.exports = async (selector, name) => {
         console.log(res)
         if (!res.passed) {
             throw new Error(
-                `To much differences between the two screenshots, ${path.join(
+                `To much differences between the two screenshots, [${path.join(
                     utils.screenshotSavePath,
                     'A',
                     name
                 ) +
-                    ' & ' +
+                    '] & [' +
                     path.join(
                         utils.screenshotSavePath,
                         'B',
                         name
-                    )}, the differences you can find out in ${path.join(
+                    )}], the differences you can find out in [${path.join(
                     utils.screenshotSavePath,
                     'output',
                     name
-                )}`
+                )}]`
             )
         }
     }

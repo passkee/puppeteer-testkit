@@ -1,4 +1,4 @@
-# puppeteer-domkit
+# puppeteer-testkit
 
 ### A toolkit for DOM operation with puppeteer in nodejs environment, which greatly improves test case development efficiency
 
@@ -9,7 +9,7 @@ I got tired of writing so many callbacks for DOM operations with puppeteer api.
 ## Installation
 
 ```javascript
-npm install puppeteer-domkit --save-dev
+npm install puppeteer-testkit --save-dev
 ```
 
 > This project already contains typings files, just enjoy programing with TypeScript
@@ -18,12 +18,12 @@ npm install puppeteer-domkit --save-dev
 
 ```javascript
 import puppeteer from 'puppeteer'
-import $ from 'puppeteer-domkit'
+import $ from 'puppeteer-testkit'
 
 (async ()=>{
     let browser = await puppeteer.launch()
 
-    // puppeteer-domkit would init with browser and set the default page to be the current page.
+    // puppeteer-testkit would init with browser and set the default page to be the current page.
     await $.setBrowser(await browser.pages())
 
     const $body = $('body')
@@ -40,9 +40,9 @@ import $ from 'puppeteer-domkit'
 
 [zepto.js Doc](https://zeptojs.com/)
 
-What's different from `zepto.js` is that, `puppeteer-domkit` only supports getting data from dom but not setting data to dom or changing dom.
+What's different from `zepto.js` is that, `puppeteer-testkit` only supports getting data from dom but not setting data to dom or changing dom.
 
-In chromium page, it was modified for `puppeteer-domkit` and exposes `$Z` namespace.
+In chromium page, it was modified for `puppeteer-testkit` and exposes `$Z` namespace.
 
 ## Methods return instance of VSelector
 
@@ -156,7 +156,7 @@ await $('div.dialog').waitFor.attr('id', $.constants.NOT_EMPTY)
 
 ---
 
-## `puppeteer-domkit` is being revised and updated periodically
+## `puppeteer-testkit` is being revised and updated periodically
 
 ## Welcome to be a contributor to this project
 

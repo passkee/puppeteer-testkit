@@ -4,6 +4,7 @@
 module.exports = async (selector, offsetY) => {
     const el = await page.$(selector)
     const box = await el.boundingBox()
+
     if (!el || !box) {
         throw '[puppeteer-testkit] element not visible or deleted fro document'
     }

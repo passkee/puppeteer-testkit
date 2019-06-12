@@ -34,7 +34,7 @@ TestKit.setBrowser = async (b) => {
     })
 }
 
-TestKit.setScreenshotFolderPath = (savePath) => {
+TestKit.setScreenshotFolder = (savePath) => {
     utils.screenshotSavePath = savePath
 }
 

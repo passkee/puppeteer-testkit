@@ -1,4 +1,7 @@
-const clickFor = require('./triggers/clickFor')
+const click = require('./triggers/click')
+const mouseDown = require('./triggers/mouseDown')
+const mouseUp = require('./triggers/mouseUp')
+const mouseMove = require('./triggers/mouseMove')
 const blur = require('./triggers/blur')
 const input = require('./triggers/input')
 const utils = require('./utils')
@@ -157,15 +160,35 @@ class VSelector {
         }, this.selectors)
     }
 
-    /**
-     * 增强点击
-     * @param {*} opts
-     */
-    async click(opts) {
+    async click(offset) {
         this.domSelector = await utils.converToDomSelector(
             utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
         )
-        await clickFor.call(this, this.domSelector, opts)
+        await click.call(this, this.domSelector, offset)
+        return this
+    }
+
+    async mouseDown(offset) {
+        this.domSelector = await utils.converToDomSelector(
+            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
+        )
+        await mouseDown.call(this, this.domSelector, offset)
+        return this
+    }
+
+    async mouseMove(offset) {
+        this.domSelector = await utils.converToDomSelector(
+            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
+        )
+        await mouseMove.call(this, this.domSelector, offset)
+        return this
+    }
+
+    async mouseUp(offset) {
+        this.domSelector = await utils.converToDomSelector(
+            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
+        )
+        await mouseUp.call(this, this.domSelector, offset)
         return this
     }
 

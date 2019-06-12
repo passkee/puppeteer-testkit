@@ -4,7 +4,10 @@ export declare class VSelector {
 
     input(content: string, autoBlur?: boolean): Promise<void>
     type(content: string, autoBlur?: boolean): Promise<void>
-    click(options?: clickForOptions): Promise<void>
+    click(offset?: offset): Promise<void>
+    mouseDown(offset?: offset): Promise<void>
+    mouseMove(offset?: offset): Promise<void>
+    mouseUp(offset?: offset): Promise<void>
     focus(): Promise<void>
     blur(offsetY?: number): Promise<void>
     hover(): Promise<void>
@@ -125,18 +128,9 @@ interface DomExpect {
     hasClass(name: string | Symbol, value: boolean): Promise<void>
 }
 
-interface clickForOptions {
-    timeout?: number
-    timespan?: number
-    delay?: number
+interface offset {
     x?: number
     y?: number
-    until?: Function
-    forShow?: string
-    forHidden?: string
-    forDispose?: string
-    forTarget?: string
-    closeTarget?: boolean
 }
 
 export interface PlainObject {

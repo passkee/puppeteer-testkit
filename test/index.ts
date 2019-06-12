@@ -15,7 +15,7 @@ const $: TestKit = require('../index')
 describe('puppeteer-testkit', () => {
     before(async () => {
         let browser = await puppeteer.launch({
-            //headless: false
+            headless: false
             //headless: true
             //devtools: true
         })
@@ -41,11 +41,81 @@ describe('puppeteer-testkit', () => {
                                         for-ppt-test
 								</div>
 								<input type="text" id="input-text" />
-								<input type="file" id="input-file" />
+                                <input type="file" id="input-file" />
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br><br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br><br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br><br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br><br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+
+                                <input type="text" id="input-bottom1" /> <br>
+                                <br>
+                                <input type="text" id="input-bottom2" /> <br>
+                                <br>
+                                <input type="text" id="input-bottom3" />
+
 								</body></html>
-								<style>
+                                <style>
+                                body{background:#eee;}
 									input:hover{
-										border: 1px solid rgb(255, 0, 0);
+                                        border: 10px solid rgb(255, 0, 0);
+                                        background-color:rgba(0,0,0,1)
 									}
 								</style>
                                 `)
@@ -54,7 +124,7 @@ describe('puppeteer-testkit', () => {
         await page.waitFor(1000)
     })
     after(() => {
-        $.browser.close()
+        //$.browser.close()
     })
     describe('TestKit', TK)
     describe('TestKit.expect', $expect)

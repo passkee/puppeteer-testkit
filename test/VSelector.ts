@@ -44,7 +44,7 @@ const selectors = [
 // 没时间，只好这样简单校验下
 export default () => {
     it('VSelector.prototype.screenshot', async () => {
-        await $('body').screenshot('/sss/1.png')
+        await $('#for-ppt-test').screenshot('/sss/1.png')
     })
 
     it('VSelector.prototype.upload', async () => {

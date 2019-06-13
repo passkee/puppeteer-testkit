@@ -2,7 +2,7 @@ module.exports = async (selector, offset = {}) => {
     offset = Object.assign(
         {
             x: 0,
-            y: 1
+            y: 0
         },
         offset
     )
@@ -20,6 +20,6 @@ module.exports = async (selector, offset = {}) => {
 
     await page.mouse.move(
         box.x + (offset.x ? offset.x : box.width / 2),
-        box.y + (offset.y || 1)
+        box.y + (offset.y ? offset.y : box.height / 2)
     )
 }

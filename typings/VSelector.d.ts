@@ -4,10 +4,10 @@ export declare class VSelector {
 
     input(content: string, autoBlur?: boolean): Promise<void>
     type(content: string, autoBlur?: boolean): Promise<void>
-    click(offset?: offset): Promise<void>
-    mouseDown(offset?: offset): Promise<void>
+    click: MouseTrigger
+    mouseDown: MouseTrigger
     mouseMove(offset?: offset): Promise<void>
-    mouseUp(offset?: offset): Promise<void>
+    mouseUp: MouseTrigger
     focus(): Promise<void>
     blur(offsetY?: number): Promise<void>
     hover(): Promise<void>
@@ -140,6 +140,13 @@ export interface PlainObject {
 export interface WaitForOptions {
     timeout?: number
     delay?: number
+}
+
+export interface MouseTrigger {
+    (offset?: offset): Promise<void>
+    left(offset?: offset): Promise<void>
+    middle(offset?: offset): Promise<void>
+    right(offset?: offset): Promise<void>
 }
 
 export default VSelector

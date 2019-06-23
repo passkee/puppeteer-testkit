@@ -1,4 +1,6 @@
-module.exports = async (selector, offset = {}) => {
+const { MouseButton } = require('../constants')
+
+module.exports = async (selector, offset = {}, button) => {
     offset = Object.assign(
         {
             x: 0,
@@ -19,7 +21,10 @@ module.exports = async (selector, offset = {}) => {
 
     await page.mouse.move(
         box.x + (offset.x ? offset.x : box.width / 2),
-        box.y + (offset.y ? offset.y : box.height / 2)
+        box.y + (offset.y ? offset.y : box.height / 2),
+        {
+            steps: 10
+        }
     )
-    await page.mouse.up()
+    await page.mouse.up({ button: MouseButton[button] || 'left' })
 }

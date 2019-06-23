@@ -1,6 +1,6 @@
 const path = require('path')
 const utils = require('./utils')
-const constants = require('./constants')
+const { CompareVars } = require('./constants')
 const VSelector = require('./VSelector')
 const expects = require('./bom/expects')
 const waitFors = require('./bom/waitFors')
@@ -18,7 +18,7 @@ function TestKit(selector) {
     return new VSelector(selector)
 }
 
-TestKit.constants = constants
+TestKit.constants = CompareVars
 TestKit.browser = null
 TestKit.setBrowser = async (b) => {
     browser = TestKit.browser = b

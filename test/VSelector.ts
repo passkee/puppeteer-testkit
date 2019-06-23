@@ -57,12 +57,12 @@ export default () => {
         await $('#input-text').waitFor.css('border', '1px solid rgb(255, 0, 0)')
     })
 
-    it.only('VSelector.prototype.click', async () => {
+    it('VSelector.prototype.click', async () => {
         await $('#input-bottom1').click()
         await $('#input-bottom1').screenshot('VSelector.prototype.click.png')
     })
 
-    it.only('VSelector.prototype.mouseMove', async () => {
+    it('VSelector.prototype.mouseMove', async () => {
         await $('#input-bottom1').focus()
         await $('#input-bottom1').blur()
         await $('#input-bottom1').mouseMove({ y: 10, x: 10 })
@@ -71,7 +71,7 @@ export default () => {
         )
     })
 
-    it.only('VSelector.prototype.mouseDown', async () => {
+    it('VSelector.prototype.mouseDown', async () => {
         await $('#input-bottom2').focus()
         await $('#input-bottom1').blur()
         await $('#input-bottom2').mouseDown()
@@ -80,11 +80,23 @@ export default () => {
         )
     })
 
-    it.only('VSelector.prototype.mouseUp', async () => {
+    it('VSelector.prototype.mouseUp', async () => {
         await $('#input-bottom3').focus()
         await $('#input-bottom1').blur()
         await $('#input-bottom3').mouseUp()
         await $('#input-bottom3').screenshot('VSelector.prototype.mouseUp.png')
+    })
+
+    it.only('VSelector.prototype.mouseDown.right', async () => {
+        await $('#input-bottom3').focus()
+        await $('#input-bottom1').blur()
+        await $('#input-bottom3').mouseDown.right()
+    })
+
+    it.only('VSelector.prototype.mouseUp.middle', async () => {
+        await $('#input-bottom3').focus()
+        await $('#input-bottom1').blur()
+        await $('#input-bottom3').mouseUp.middle()
     })
 
     it('VSelector.prototype.type', async () => {

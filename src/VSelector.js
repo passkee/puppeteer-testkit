@@ -7,6 +7,15 @@ const input = require('./triggers/input')
 const utils = require('./utils')
 const screenshot = require('./screenshot')
 
+const { MouseButton } = require('./constants')
+
+const mTriggers = {
+    click,
+    mouseDown,
+    mouseUp,
+    mouseMove
+}
+
 function $(selector) {
     return new VSelector(selector)
 }
@@ -148,48 +157,88 @@ class VSelector {
             }
         }
 
-        utils.defineFreezedProps(this, {
-            expect: expects,
-            waitFor: waitFors
+        const mouseTriggers = {
+            // click: async (offset) => {
+            //     this.domSelector = await utils.converToDomSelector(
+            //         utils.assignSelectors(this.selectors, [
+            //             { type: 'eq', params: [0] }
+            //         ])
+            //     )
+            //     await click.call(this, this.domSelector, offset)
+            //     return this
+            // },
+            // mouseDown: async (offset) => {
+            //     this.domSelector = await utils.converToDomSelector(
+            //         utils.assignSelectors(this.selectors, [
+            //             { type: 'eq', params: [0] }
+            //         ])
+            //     )
+            //     await mouseDown.call(this, this.domSelector, offset)
+            //     return this
+            // },
+            // mouseMove: async (offset) => {
+            //     this.domSelector = await utils.converToDomSelector(
+            //         utils.assignSelectors(this.selectors, [
+            //             { type: 'eq', params: [0] }
+            //         ])
+            //     )
+            //     await mouseMove.call(this, this.domSelector, offset)
+            //     return this
+            // },
+            // mouseUp: async (offset) => {
+            //     this.domSelector = await utils.converToDomSelector(
+            //         utils.assignSelectors(this.selectors, [
+            //             { type: 'eq', params: [0] }
+            //         ])
+            //     )
+            //     await mouseUp.call(this, this.domSelector, offset)
+            //     return this
+            // }
+        }
+
+        Object.keys(mTriggers).forEach((trigger) => {
+            mouseTriggers[trigger] = async (offset) => {
+                this.domSelector = await utils.converToDomSelector(
+                    utils.assignSelectors(this.selectors, [
+                        { type: 'eq', params: [0] }
+                    ])
+                )
+                await mTriggers[trigger].call(this, this.domSelector, offset)
+            }
+            if (trigger !== 'mouseMove') {
+                Object.keys(MouseButton).forEach((btn) => {
+                    mouseTriggers[trigger][btn] = async (offset) => {
+                        this.domSelector = await utils.converToDomSelector(
+                            utils.assignSelectors(this.selectors, [
+                                { type: 'eq', params: [0] }
+                            ])
+                        )
+                        await mTriggers[trigger].call(
+                            this,
+                            this.domSelector,
+                            offset,
+                            btn
+                        )
+                    }
+                })
+            }
         })
+        utils.defineFreezedProps(
+            this,
+            Object.assign(
+                {
+                    expect: expects,
+                    waitFor: waitFors
+                },
+                mouseTriggers
+            )
+        )
     }
 
     async length() {
         return await page.evaluate((selectors) => {
             return $Z.$select(selectors).length
         }, this.selectors)
-    }
-
-    async click(offset) {
-        this.domSelector = await utils.converToDomSelector(
-            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
-        )
-        await click.call(this, this.domSelector, offset)
-        return this
-    }
-
-    async mouseDown(offset) {
-        this.domSelector = await utils.converToDomSelector(
-            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
-        )
-        await mouseDown.call(this, this.domSelector, offset)
-        return this
-    }
-
-    async mouseMove(offset) {
-        this.domSelector = await utils.converToDomSelector(
-            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
-        )
-        await mouseMove.call(this, this.domSelector, offset)
-        return this
-    }
-
-    async mouseUp(offset) {
-        this.domSelector = await utils.converToDomSelector(
-            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
-        )
-        await mouseUp.call(this, this.domSelector, offset)
-        return this
     }
 
     async blur(offsetY) {

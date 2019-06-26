@@ -1,6 +1,6 @@
 {
     "name": "puppeteer-testkit",
-    "version": "0.4.0",
+    "version": "0.4.2",
     "description": "A toolkit for DOM & BOM operation with puppeteer in nodejs environment, which greatly improves test case development efficiency",
     "main": "src/TestKit.js",
     "scripts": {

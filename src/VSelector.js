@@ -1,7 +1,7 @@
 const click = require('./triggers/click')
-const mouseDown = require('./triggers/mouseDown')
-const mouseUp = require('./triggers/mouseUp')
-const mouseMove = require('./triggers/mouseMove')
+const mousedown = require('./triggers/mouseDown')
+const mouseup = require('./triggers/mouseUp')
+const mousemove = require('./triggers/mouseMove')
 const blur = require('./triggers/blur')
 const input = require('./triggers/input')
 const utils = require('./utils')
@@ -11,9 +11,9 @@ const { MouseButton } = require('./constants')
 
 const mTriggers = {
     click,
-    mouseDown,
-    mouseUp,
-    mouseMove
+    mousedown,
+    mouseup,
+    mousemove
 }
 
 function $(selector) {
@@ -157,44 +157,7 @@ class VSelector {
             }
         }
 
-        const mouseTriggers = {
-            // click: async (offset) => {
-            //     this.domSelector = await utils.converToDomSelector(
-            //         utils.assignSelectors(this.selectors, [
-            //             { type: 'eq', params: [0] }
-            //         ])
-            //     )
-            //     await click.call(this, this.domSelector, offset)
-            //     return this
-            // },
-            // mouseDown: async (offset) => {
-            //     this.domSelector = await utils.converToDomSelector(
-            //         utils.assignSelectors(this.selectors, [
-            //             { type: 'eq', params: [0] }
-            //         ])
-            //     )
-            //     await mouseDown.call(this, this.domSelector, offset)
-            //     return this
-            // },
-            // mouseMove: async (offset) => {
-            //     this.domSelector = await utils.converToDomSelector(
-            //         utils.assignSelectors(this.selectors, [
-            //             { type: 'eq', params: [0] }
-            //         ])
-            //     )
-            //     await mouseMove.call(this, this.domSelector, offset)
-            //     return this
-            // },
-            // mouseUp: async (offset) => {
-            //     this.domSelector = await utils.converToDomSelector(
-            //         utils.assignSelectors(this.selectors, [
-            //             { type: 'eq', params: [0] }
-            //         ])
-            //     )
-            //     await mouseUp.call(this, this.domSelector, offset)
-            //     return this
-            // }
-        }
+        const mouseTriggers = {}
 
         Object.keys(mTriggers).forEach((trigger) => {
             mouseTriggers[trigger] = async (offset) => {

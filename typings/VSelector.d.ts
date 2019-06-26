@@ -5,9 +5,9 @@ export declare class VSelector {
     input(content: string, autoBlur?: boolean): Promise<void>
     type(content: string, autoBlur?: boolean): Promise<void>
     click: MouseTrigger
-    mouseDown: MouseTrigger
-    mouseMove(offset?: offset): Promise<void>
-    mouseUp: MouseTrigger
+    mousedown: MouseTrigger
+    mousemove(offset?: offset): Promise<void>
+    mouseup: MouseTrigger
     focus(): Promise<void>
     blur(offsetY?: number): Promise<void>
     hover(): Promise<void>

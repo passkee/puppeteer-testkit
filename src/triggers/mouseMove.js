@@ -6,7 +6,6 @@ module.exports = async (selector, offset = {}) => {
         },
         offset
     )
-    await page.waitForSelector(selector)
     const el = await page.$(selector)
     const box = await el.boundingBox()
 

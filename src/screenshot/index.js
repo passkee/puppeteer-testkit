@@ -8,9 +8,10 @@ module.exports = async (selector, name) => {
         return $Z(selector).offset()
     }, selector)
 
+    // todo: 优化错误提示
     if (!offset) {
         throw new Error(
-            '[puppeteer-testkit] element not visible or deleted fro document'
+            `[puppeteer-testkit] element not visible or deleted fro document`
         )
     }
     console.log(offset)
@@ -65,7 +66,7 @@ function diff(name) {
             imageAPath: AImage,
             imageBPath: BImage,
             thresholdType: BlinkDiff.THRESHOLD_PERCENT,
-            threshold: 0.01,
+            threshold: 0.0001,
             imageOutputPath: OImage
         })
 

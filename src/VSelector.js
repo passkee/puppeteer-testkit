@@ -161,27 +161,47 @@ class VSelector {
 
         Object.keys(mTriggers).forEach((trigger) => {
             mouseTriggers[trigger] = async (offset) => {
-                this.domSelector = await utils.converToDomSelector(
-                    utils.assignSelectors(this.selectors, [
-                        { type: 'eq', params: [0] }
-                    ])
-                )
-                await mTriggers[trigger].call(this, this.domSelector, offset)
+                try {
+                    this.domSelector = await utils.converToDomSelector(
+                        utils.assignSelectors(this.selectors, [
+                            { type: 'eq', params: [0] }
+                        ])
+                    )
+                    await mTriggers[trigger].call(
+                        this,
+                        this.domSelector,
+                        offset
+                    )
+                } catch (e) {
+                    throw new Error(
+                        `selectors:${JSON.stringify(this.selectors)}\n\n${
+                            e.message
+                        }`
+                    )
+                }
             }
             if (trigger !== 'mouseMove') {
                 Object.keys(MouseButton).forEach((btn) => {
                     mouseTriggers[trigger][btn] = async (offset) => {
-                        this.domSelector = await utils.converToDomSelector(
-                            utils.assignSelectors(this.selectors, [
-                                { type: 'eq', params: [0] }
-                            ])
-                        )
-                        await mTriggers[trigger].call(
-                            this,
-                            this.domSelector,
-                            offset,
-                            btn
-                        )
+                        try {
+                            this.domSelector = await utils.converToDomSelector(
+                                utils.assignSelectors(this.selectors, [
+                                    { type: 'eq', params: [0] }
+                                ])
+                            )
+                            await mTriggers[trigger].call(
+                                this,
+                                this.domSelector,
+                                offset,
+                                btn
+                            )
+                        } catch (e) {
+                            throw new Error(
+                                `selectors:${JSON.stringify(
+                                    this.selectors
+                                )}\n\n${e.message}`
+                            )
+                        }
                     }
                 })
             }
@@ -205,67 +225,123 @@ class VSelector {
     }
 
     async blur(offsetY) {
-        this.domSelector = await utils.converToDomSelector(
-            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
-        )
-        await blur(this.domSelector, offsetY)
-        return this
+        try {
+            this.domSelector = await utils.converToDomSelector(
+                utils.assignSelectors(this.selectors, [
+                    { type: 'eq', params: [0] }
+                ])
+            )
+            await blur(this.domSelector, offsetY)
+            return this
+        } catch (e) {
+            throw new Error(
+                `selectors:${JSON.stringify(this.selectors)}\n\n${e.message}`
+            )
+        }
     }
 
     async focus() {
-        this.domSelector = await utils.converToDomSelector(
-            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
-        )
-        await page.focus(this.domSelector)
-        return this
+        try {
+            this.domSelector = await utils.converToDomSelector(
+                utils.assignSelectors(this.selectors, [
+                    { type: 'eq', params: [0] }
+                ])
+            )
+            await page.focus(this.domSelector)
+            return this
+        } catch (e) {
+            throw new Error(
+                `selectors:${JSON.stringify(this.selectors)}\n\n${e.message}`
+            )
+        }
     }
 
     async input(content, autoBlur) {
-        this.domSelector = await utils.converToDomSelector(
-            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
-        )
-        await input(this.domSelector, content, autoBlur)
-        return this
+        try {
+            this.domSelector = await utils.converToDomSelector(
+                utils.assignSelectors(this.selectors, [
+                    { type: 'eq', params: [0] }
+                ])
+            )
+            await input(this.domSelector, content, autoBlur)
+            return this
+        } catch (e) {
+            throw new Error(
+                `selectors:${JSON.stringify(this.selectors)}\n\n${e.message}`
+            )
+        }
     }
 
     async type(content, autoBlur = true) {
-        this.domSelector = await utils.converToDomSelector(
-            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
-        )
-        await page.type(this.domSelector, content)
-        if (autoBlur) {
-            await blur(this.domSelector)
+        try {
+            this.domSelector = await utils.converToDomSelector(
+                utils.assignSelectors(this.selectors, [
+                    { type: 'eq', params: [0] }
+                ])
+            )
+            await page.type(this.domSelector, content)
+            if (autoBlur) {
+                await blur(this.domSelector)
+            }
+        } catch (e) {
+            throw new Error(
+                `selectors:${JSON.stringify(this.selectors)}\n\n${e.message}`
+            )
         }
     }
 
     async hover() {
-        this.domSelector = await utils.converToDomSelector(
-            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
-        )
-        await page.hover(this.domSelector)
+        try {
+            this.domSelector = await utils.converToDomSelector(
+                utils.assignSelectors(this.selectors, [
+                    { type: 'eq', params: [0] }
+                ])
+            )
+            await page.hover(this.domSelector)
+        } catch (e) {
+            throw new Error(
+                `selectors:${JSON.stringify(this.selectors)}\n\n${e.message}`
+            )
+        }
     }
 
     async upload(filePaths) {
-        this.domSelector = await utils.converToDomSelector(
-            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
-        )
-        const isFileInput = await page.$eval(
-            this.domSelector,
-            (el) => el.tagName === 'INPUT' && el.type === 'file'
-        )
-        if (!isFileInput) {
-            throw new Error(`[TestKit] the element should be file input`)
-        }
+        try {
+            this.domSelector = await utils.converToDomSelector(
+                utils.assignSelectors(this.selectors, [
+                    { type: 'eq', params: [0] }
+                ])
+            )
+            const isFileInput = await page.$eval(
+                this.domSelector,
+                (el) => el.tagName === 'INPUT' && el.type === 'file'
+            )
+            if (!isFileInput) {
+                throw new Error(`[TestKit] the element should be file input`)
+            }
 
-        const el = await page.$(this.domSelector)
-        await utils.apply(el.uploadFile, filePaths, el)
+            const el = await page.$(this.domSelector)
+            await utils.apply(el.uploadFile, filePaths, el)
+        } catch (e) {
+            throw new Error(
+                `selectors:${JSON.stringify(this.selectors)}\n\n${e.message}`
+            )
+        }
     }
 
     async screenshot(name) {
-        this.domSelector = await utils.converToDomSelector(
-            utils.assignSelectors(this.selectors, [{ type: 'eq', params: [0] }])
-        )
-        await screenshot(this.domSelector, name)
+        try {
+            this.domSelector = await utils.converToDomSelector(
+                utils.assignSelectors(this.selectors, [
+                    { type: 'eq', params: [0] }
+                ])
+            )
+            await screenshot(this.domSelector, name)
+        } catch (e) {
+            throw new Error(
+                `selectors:${JSON.stringify(this.selectors)}\n\n${e.message}`
+            )
+        }
     }
 
     /* to dev

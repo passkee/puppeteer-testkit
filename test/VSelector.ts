@@ -54,7 +54,7 @@ export default () => {
 
     it('VSelector.prototype.hover', async () => {
         await $('#input-text').hover()
-        await $('#input-text').waitFor.css('border', '1px solid rgb(255, 0, 0)')
+        await $('#input-text').waitFor.css('border-color', 'rgb(255, 0, 0)')
     })
 
     it('VSelector.prototype.click', async () => {
@@ -65,7 +65,7 @@ export default () => {
     it('VSelector.prototype.mouseMove', async () => {
         await $('#input-bottom1').focus()
         await $('#input-bottom1').blur()
-        await $('#input-bottom1').mouseMove({ y: 10, x: 10 })
+        await $('#input-bottom1').mousemove({ y: 10, x: 10 })
         await $('#input-bottom1').screenshot(
             'VSelector.prototype.mouseMove.png'
         )
@@ -74,7 +74,7 @@ export default () => {
     it('VSelector.prototype.mouseDown', async () => {
         await $('#input-bottom2').focus()
         await $('#input-bottom1').blur()
-        await $('#input-bottom2').mouseDown()
+        await $('#input-bottom2').mousedown()
         await $('#input-bottom2').screenshot(
             'VSelector.prototype.mouseDown.png'
         )
@@ -83,20 +83,20 @@ export default () => {
     it('VSelector.prototype.mouseUp', async () => {
         await $('#input-bottom3').focus()
         await $('#input-bottom1').blur()
-        await $('#input-bottom3').mouseUp()
+        await $('#input-bottom3').mouseup()
         await $('#input-bottom3').screenshot('VSelector.prototype.mouseUp.png')
     })
 
-    it.only('VSelector.prototype.mouseDown.right', async () => {
+    it('VSelector.prototype.mouseDown.right', async () => {
         await $('#input-bottom3').focus()
         await $('#input-bottom1').blur()
-        await $('#input-bottom3').mouseDown.right()
+        await $('#input-bottom3').mousedown.right()
     })
 
-    it.only('VSelector.prototype.mouseUp.middle', async () => {
+    it('VSelector.prototype.mouseUp.middle', async () => {
         await $('#input-bottom3').focus()
         await $('#input-bottom1').blur()
-        await $('#input-bottom3').mouseUp.middle()
+        await $('#input-bottom3').mouseup.middle()
     })
 
     it('VSelector.prototype.type', async () => {

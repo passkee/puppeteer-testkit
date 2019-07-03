@@ -38,7 +38,7 @@ interface $WaitFor {
     target(urlSubstr: string, options?: WaitForOptions): Promise<void>
     request(
         urlOrPath: string,
-        postData?: string,
+        postData?: string | { [key: string]: any },
         options?: TimeoutOption
     ): Promise<void>
     response(urlOrPath: string, options?: TimeoutOption): Promise<void>

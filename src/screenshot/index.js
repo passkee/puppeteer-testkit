@@ -14,7 +14,6 @@ module.exports = async (selector, name) => {
             `[puppeteer-testkit] element not visible or deleted fro document`
         )
     }
-    console.log(offset)
 
     const image = await page.screenshot({
         // document坐标
@@ -33,7 +32,6 @@ module.exports = async (selector, name) => {
         saveTo(name, 'B', image)
         saveTo(name, 'output', '')
         const res = await diff(name)
-        console.log(res)
         if (!res.passed) {
             throw new Error(
                 `To much differences between the two screenshots, [${path.join(

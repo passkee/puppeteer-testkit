@@ -164,6 +164,7 @@ class VSelector {
                 try {
                     this.domSelector = await utils.converToDomSelector(
                         utils.assignSelectors(this.selectors, [
+                            { type: 'filter', params: [':visible'] },
                             { type: 'eq', params: [0] }
                         ])
                     )
@@ -186,6 +187,7 @@ class VSelector {
                         try {
                             this.domSelector = await utils.converToDomSelector(
                                 utils.assignSelectors(this.selectors, [
+                                    { type: 'filter', params: [':visible'] },
                                     { type: 'eq', params: [0] }
                                 ])
                             )
@@ -228,6 +230,7 @@ class VSelector {
         try {
             this.domSelector = await utils.converToDomSelector(
                 utils.assignSelectors(this.selectors, [
+                    { type: 'filter', params: [':visible'] },
                     { type: 'eq', params: [0] }
                 ])
             )
@@ -244,6 +247,7 @@ class VSelector {
         try {
             this.domSelector = await utils.converToDomSelector(
                 utils.assignSelectors(this.selectors, [
+                    { type: 'filter', params: [':visible'] },
                     { type: 'eq', params: [0] }
                 ])
             )
@@ -260,6 +264,7 @@ class VSelector {
         try {
             this.domSelector = await utils.converToDomSelector(
                 utils.assignSelectors(this.selectors, [
+                    { type: 'filter', params: [':visible'] },
                     { type: 'eq', params: [0] }
                 ])
             )
@@ -276,6 +281,7 @@ class VSelector {
         try {
             this.domSelector = await utils.converToDomSelector(
                 utils.assignSelectors(this.selectors, [
+                    { type: 'filter', params: [':visible'] },
                     { type: 'eq', params: [0] }
                 ])
             )
@@ -294,6 +300,7 @@ class VSelector {
         try {
             this.domSelector = await utils.converToDomSelector(
                 utils.assignSelectors(this.selectors, [
+                    { type: 'filter', params: [':visible'] },
                     { type: 'eq', params: [0] }
                 ])
             )
@@ -309,6 +316,7 @@ class VSelector {
         try {
             this.domSelector = await utils.converToDomSelector(
                 utils.assignSelectors(this.selectors, [
+                    { type: 'filter', params: [':visible'] },
                     { type: 'eq', params: [0] }
                 ])
             )
@@ -333,6 +341,7 @@ class VSelector {
         try {
             this.domSelector = await utils.converToDomSelector(
                 utils.assignSelectors(this.selectors, [
+                    { type: 'filter', params: [':visible'] },
                     { type: 'eq', params: [0] }
                 ])
             )
@@ -368,6 +377,7 @@ const props1 = ['css', 'attr', 'prop', 'data', 'is', 'hasClass']
 // 选择器
 const selectors = [
     'has',
+    'filter',
     'not',
     'parents',
     'parent',

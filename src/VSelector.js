@@ -392,11 +392,15 @@ const selectors = [
 ]
 
 VSelector.prototype.visible = async function() {
+    const selector = await utils.converToDomSelector(this.selectors)
+    if (!selector) return false
     return await utils.visible(await utils.converToDomSelector(this.selectors))
 }
 
 VSelector.prototype.exist = async function() {
-    return await utils.exist(await utils.converToDomSelector(this.selectors))
+    const selector = await utils.converToDomSelector(this.selectors)
+    if (!selector) return false
+    return await utils.exist(selector)
 }
 
 // 选择器

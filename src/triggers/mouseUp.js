@@ -25,5 +25,6 @@ module.exports = async (selector, offset = {}, button) => {
             steps: 10
         }
     )
+    await page.waitFor(100)
     await page.mouse.up({ button: MouseButton[button] || 'left' })
 }
